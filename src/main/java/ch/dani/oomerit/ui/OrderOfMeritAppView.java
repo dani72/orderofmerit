@@ -13,6 +13,7 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.PWA;
@@ -23,12 +24,11 @@ import com.vaadin.flow.server.PWA;
  */
 @PWA(name = "Order of Merit", shortName = "OrderOfMerit")
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no")
+@PageTitle( "Order of Merit TTC Gelterkinden")
 @Route( "")
 public class OrderOfMeritAppView extends AppLayout implements AppShellConfigurator, RouterLayout {
 
     public OrderOfMeritAppView( SessionMgr session, OrderOfMeritService oomService) {
-//        Image img = new Image("https://i.imgur.com/GPpnszs.png", "Vaadin Logo");
-//        img.setHeight("44px");
         addToNavbar(new DrawerToggle(), new H3( "Order of Merit TTC Gelterkinden"));
 
         var tabs = new Tabs();
@@ -53,6 +53,9 @@ public class OrderOfMeritAppView extends AppLayout implements AppShellConfigurat
         
         if( !session.isLoggedIn()) {
             tabs.add( new ActionTab( "Login", () -> UI.getCurrent().navigate( LoginView.class)));
+        }
+        else {
+            tabs.add( new ActionTab( "Logout", () -> UI.getCurrent().navigate( LogoutView.class)));
         }
         
         tabs.setOrientation(Tabs.Orientation.VERTICAL);

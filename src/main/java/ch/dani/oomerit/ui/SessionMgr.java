@@ -30,6 +30,10 @@ public class SessionMgr {
         this.user = userService.authenticate( username, password);
     }
     
+    public void logout() {
+        this.user = null;
+    }
+    
     public boolean isAdmin() {
         return (user != null) && user.getRole() == User.Role.ADMIN;
     }
