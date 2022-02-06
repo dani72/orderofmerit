@@ -6,9 +6,11 @@ package ch.dani.oomerit.ui;
 
 import ch.dani.oomerit.domain.OrderEntry;
 import ch.dani.oomerit.service.OrderOfMeritService;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.virtuallist.VirtualList;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 /**
  *
@@ -24,17 +26,17 @@ public class RankingView extends VerticalLayout {
         this.setHeightFull();
         this.setWidthFull();
 
-        Grid<OrderEntry> grid = new Grid<>();
+        VirtualList vl = new VirtualList();
         
-        grid.addColumn( e -> e.getPlayer().getFirstname()).setHeader( "First Name");
-        grid.addColumn( e -> e.getPlayer().getLastname()).setHeader( "Last Name");
-        grid.addColumn( e -> e.getPlayer().getNickname()).setHeader( "Nick Name");
-        grid.addColumn( e -> e.getNofMerits()).setHeader( "Merits");
+        vl.setItems( service.getOrderOfMerit());
+        vl.setRenderer( new ComponentRenderer<>( this::renderComponent));
+        vl.setWidthFull();
+        vl.setHeightFull();
         
-        grid.setItems( service.getOrderOfMerit());
-        grid.setHeightFull();
-        grid.setWidthFull();
-        
-        this.add( grid);
+        this.add( vl);
+    }
+    
+    private OrderEntryItem renderComponent( OrderEntry entry) {
+        return new OrderEntryItem( entry);
     }
 }
