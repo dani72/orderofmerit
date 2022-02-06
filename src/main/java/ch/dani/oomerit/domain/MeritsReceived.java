@@ -4,6 +4,7 @@
  */
 package ch.dani.oomerit.domain;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +13,7 @@ import java.util.Set;
  *
  * @author dani
  */
-public class AddMerits {
+public class MeritsReceived {
     public Player player;
     public Event event;
     public final Set<Merit> merits = new HashSet<>();
@@ -37,7 +38,7 @@ public class AddMerits {
         return Collections.unmodifiableSet( this.merits);
     }
     
-    public void setMerits( Set<Merit> merits) {
+    public void setMerits( Collection<Merit> merits) {
         this.merits.clear();
         this.merits.addAll( merits);
     }

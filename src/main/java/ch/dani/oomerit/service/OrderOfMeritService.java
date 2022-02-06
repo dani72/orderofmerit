@@ -4,7 +4,8 @@
  */
 package ch.dani.oomerit.service;
 
-import ch.dani.oomerit.domain.AddMerits;
+import ch.dani.oomerit.domain.Event;
+import ch.dani.oomerit.domain.MeritsReceived;
 import ch.dani.oomerit.domain.Merit;
 import ch.dani.oomerit.domain.OrderEntry;
 import ch.dani.oomerit.domain.Player;
@@ -39,7 +40,18 @@ order by total_merits DESC;
         return template.query( sql, this::createOrderEntry);
     }
     
-    public void enterMerits( AddMerits addmerits) {
+    public MeritsReceived getMeritsReceived( Event event, Player player) {
+        var merits = template.query( "SELECT * FROM merit where merit_id IN (SELECT merit_id FROM merit_received WHERE event_id = ? AND player_id = ?)", MeritService::createMerit, event.getId(), player.getId());
+        var mr = new MeritsReceived();
+        
+        mr.setEvent( event);
+        mr.setPlayer( player);
+        mr.setMerits( merits);
+        
+        return mr;
+    }
+    
+    public void updateMeritsReceived( MeritsReceived addmerits) {
         template.update( "DELETE FROM merit_received WHERE player_id = ? AND event_id = ?", addmerits.getPlayer().getId(), addmerits.getEvent().getId());
         
         for( Merit m : addmerits.getMerits()) {

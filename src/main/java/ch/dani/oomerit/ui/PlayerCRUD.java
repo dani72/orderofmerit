@@ -33,7 +33,6 @@ public class PlayerCRUD extends Crud<Player> {
         this.addDeleteListener( this::remove);
         
         this.getGrid().removeColumnByKey("id");
-        this.getGrid().setColumns( "firstname", "lastname", "nickname", "dateOfBirth", "vaadin-crud-edit-column");
         
         this.addThemeVariants(CrudVariant.NO_BORDER);
         this.setHeightFull();

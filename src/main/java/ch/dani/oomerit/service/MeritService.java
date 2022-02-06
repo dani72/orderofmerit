@@ -23,16 +23,16 @@ public class MeritService implements CrudService<Merit> {
     private JdbcTemplate template;
     
     public List<Merit> findByCategory( Merit.Category category) {
-        return template.query( "SELECT * FROM merit where category = ? OR category = 'ALL'", this::createMerit, category.name());
+        return template.query( "SELECT * FROM merit where category = ? OR category = 'ALL'", MeritService::createMerit, category.name());
     }
     
     @Override
     public List<Merit> findAll() {
-        return template.query( "SELECT * FROM merit", this::createMerit);
+        return template.query( "SELECT * FROM merit", MeritService::createMerit);
     }
     
     public Merit findById(Long id) {
-        return template.queryForObject( "SELECT * FROM merit where merit_id = ?", this::createMerit, id);
+        return template.queryForObject( "SELECT * FROM merit where merit_id = ?", MeritService::createMerit, id);
     }
     
     @Override
@@ -60,7 +60,7 @@ public class MeritService implements CrudService<Merit> {
                             merit.getName(), merit.getCategory().name(), merit.getId());
     }
     
-    private Merit createMerit( ResultSet rs, int rowNum) throws SQLException {
+    public static Merit createMerit( ResultSet rs, int rowNum) throws SQLException {
         var merit = new Merit();
         
         merit.setId( rs.getLong( "merit_id"));
