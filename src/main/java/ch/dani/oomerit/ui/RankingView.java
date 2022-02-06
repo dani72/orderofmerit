@@ -6,16 +6,16 @@ package ch.dani.oomerit.ui;
 
 import ch.dani.oomerit.domain.OrderEntry;
 import ch.dani.oomerit.service.OrderOfMeritService;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.router.Route;
 
 /**
  *
  * @author dani
  */
+@Route( value = "ranking", layout = OrderOfMeritAppView.class)
 public class RankingView extends VerticalLayout {
     
     private final OrderOfMeritService service;

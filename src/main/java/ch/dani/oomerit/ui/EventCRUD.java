@@ -14,11 +14,13 @@ import com.vaadin.flow.component.crud.CrudVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.Route;
 
 /**
  *
  * @author dani
  */
+@Route( value = "events", layout = OrderOfMeritAppView.class)
 public class EventCRUD extends Crud<Event> {
     
     private final CrudDataProvider<Event> provider;

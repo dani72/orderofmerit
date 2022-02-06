@@ -14,11 +14,13 @@ import com.vaadin.flow.component.crud.CrudVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.Route;
 
 /**
  *
  * @author dani
  */
+@Route( value = "merits", layout = OrderOfMeritAppView.class)
 public class MeritCRUD extends Crud<Merit> {
     
     private final CrudDataProvider<Merit> provider;

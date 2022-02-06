@@ -14,11 +14,13 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.Route;
 
 /**
  *
  * @author dani
  */
+@Route( value = "players", layout = OrderOfMeritAppView.class)
 public class PlayerCRUD extends Crud<Player> {
     
     private final CrudDataProvider provider;

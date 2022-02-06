@@ -21,12 +21,14 @@ import com.vaadin.flow.component.listbox.MultiSelectListBox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.router.Route;
 import java.util.Collections;
 
 /**
  *
  * @author dani
  */
+@Route( value = "addmerits", layout = OrderOfMeritAppView.class)
 public class EnterMeritsView extends VerticalLayout {
     
     private final OrderOfMeritService oomService;
