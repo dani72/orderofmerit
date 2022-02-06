@@ -66,7 +66,7 @@ public class EnterMeritsView extends VerticalLayout {
         layout.setWidthFull();
         
         var buttons = new HorizontalLayout();
-        this.saveButton = new Button( "Add Merits");
+        this.saveButton = new Button( "Update Merits");
         this.saveButton.setEnabled( false);
         
         buttons.setWidthFull();
@@ -125,6 +125,6 @@ public class EnterMeritsView extends VerticalLayout {
             oomService.updateMeritsReceived( mr);
 
             new Notification( "Merits created.", 2000).open();
-        }    
+        }
     }
 }

@@ -14,17 +14,22 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.page.AppShellConfigurator;
+import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.PWA;
 import java.util.function.Supplier;
 
 /**
  *
  * @author dani
  */
+@PWA(name = "Order of Merit", shortName = "OrderOfMerit")
+@Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no")
 @Route( "")
-public class OrderOfMeritAppView extends AppLayout {
+public class OrderOfMeritAppView extends AppLayout implements AppShellConfigurator {
 
     public OrderOfMeritAppView( SessionMgr session, PlayerService playerService, EventService eventService, MeritService meritService, OrderOfMeritService oomService, UserService userService) {
 //        Image img = new Image("https://i.imgur.com/GPpnszs.png", "Vaadin Logo");
@@ -72,6 +77,10 @@ public class OrderOfMeritAppView extends AppLayout {
         }
         else if( tab instanceof ActionTab at) {
             at.execute();
+        }
+        
+        if( this.isOverlay()) {
+            this.setDrawerOpened( false);
         }
     }
     
