@@ -4,8 +4,7 @@
  */
 package ch.dani.oomerit.ui;
 
-import ch.dani.oomerit.domain.Player;
-import ch.dani.oomerit.service.PlayerService;
+import ch.dani.oomerit.service.CrudService;
 import com.vaadin.flow.component.crud.CrudFilter;
 import com.vaadin.flow.data.provider.AbstractBackEndDataProvider;
 import com.vaadin.flow.data.provider.Query;
@@ -15,16 +14,16 @@ import java.util.stream.Stream;
  *
  * @author dani
  */
-public class PlayerDataProvider extends AbstractBackEndDataProvider<Player, CrudFilter> {
+public class CrudDataProvider<T> extends AbstractBackEndDataProvider<T, CrudFilter> {
 
-    private final PlayerService service;
+    private final CrudService<T> service;
 
-    public PlayerDataProvider( PlayerService service) {
+    public CrudDataProvider( CrudService<T> service) {
         this.service = service;
     }
     
     @Override
-    protected Stream<Player> fetchFromBackEnd(Query<Player, CrudFilter> query) {
+    protected Stream<T> fetchFromBackEnd(Query<T, CrudFilter> query) {
         int offset = query.getOffset();
         int limit = query.getLimit();
 
@@ -32,15 +31,15 @@ public class PlayerDataProvider extends AbstractBackEndDataProvider<Player, Crud
     }
 
     @Override
-    protected int sizeInBackEnd(Query<Player, CrudFilter> query) {
+    protected int sizeInBackEnd(Query<T, CrudFilter> query) {
         return service.findAll().size();
     }
 
-    public void persist(Player player) {
-        service.save( player);
+    public void persist( T entity) {
+        service.save( entity);
     }
 
-    public void delete(Player player) {
-        service.remove( player);
+    public void delete( T entity) {
+        service.remove( entity);
     }
 }

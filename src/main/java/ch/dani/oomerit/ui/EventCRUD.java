@@ -21,12 +21,12 @@ import com.vaadin.flow.data.binder.Binder;
  */
 public class EventCRUD extends Crud<Event> {
     
-    private final EventDataProvider provider;
+    private final CrudDataProvider<Event> provider;
     
     public EventCRUD( EventService service) {
         super( Event.class, createEventEditor());
         
-        this.provider = new EventDataProvider( service);
+        this.provider = new CrudDataProvider<>( service);
         
         this.setDataProvider( this.provider);
         this.addSaveListener( this::persist);

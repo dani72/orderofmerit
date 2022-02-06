@@ -21,12 +21,12 @@ import com.vaadin.flow.data.binder.Binder;
  */
 public class UserCRUD extends Crud<User> {
     
-    private final UserDataProvider provider;
+    private final CrudDataProvider<User> provider;
     
     public UserCRUD( UserService service) {
         super( User.class, createUserEditor());
         
-        this.provider = new UserDataProvider( service);
+        this.provider = new CrudDataProvider<>( service);
         
         this.setDataProvider( this.provider);
         this.addSaveListener( this::persist);

@@ -21,19 +21,19 @@ import com.vaadin.flow.data.binder.Binder;
  */
 public class PlayerCRUD extends Crud<Player> {
     
-    private final PlayerDataProvider provider;
+    private final CrudDataProvider provider;
     
     public PlayerCRUD( PlayerService service) {
         super( Player.class, createPlayerEditor());
         
-        this.provider = new PlayerDataProvider( service);
+        this.provider = new CrudDataProvider<>( service);
         
         this.setDataProvider( this.provider);
         this.addSaveListener( this::persist);
         this.addDeleteListener( this::remove);
         
         this.getGrid().removeColumnByKey("id");
-//        this.getGrid().setColumns( "firstname", "lastname", "nickname", "dateOfBirth");
+        this.getGrid().setColumns( "firstname", "lastname", "nickname", "dateOfBirth", "vaadin-crud-edit-column");
         
         this.addThemeVariants(CrudVariant.NO_BORDER);
         this.setHeightFull();

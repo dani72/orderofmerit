@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @author dani
  */
 @Service
-public class MeritService {
+public class MeritService implements CrudService<Merit> {
     
     @Autowired
     private JdbcTemplate template;
@@ -26,6 +26,7 @@ public class MeritService {
         return template.query( "SELECT * FROM merit where category = ? OR category = 'ALL'", this::createMerit, category.name());
     }
     
+    @Override
     public List<Merit> findAll() {
         return template.query( "SELECT * FROM merit", this::createMerit);
     }
@@ -34,6 +35,7 @@ public class MeritService {
         return template.queryForObject( "SELECT * FROM merit where merit_id = ?", this::createMerit, id);
     }
     
+    @Override
     public void save( Merit merit) {
         if( merit.getId() == null) {
             insert( merit);
@@ -43,6 +45,7 @@ public class MeritService {
         }
     }
     
+    @Override
     public void remove( Merit merit) {
         template.update( "DELETE FROM merit WHERE merit_id = ?", merit.getId());
     }

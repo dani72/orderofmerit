@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
  * @author dani
  */
 @Service
-public class PlayerService {
+public class PlayerService implements CrudService<Player> {
 
     @Autowired
     private JdbcTemplate template;
@@ -30,10 +30,12 @@ public class PlayerService {
         return template.queryForObject( "SELECT * FROM player where player_id = ?", this::createPlayer, id);
     }
 
+    @Override
     public List<Player> findAll() {
         return template.query( "SELECT * FROM player", this::createPlayer);
     }
     
+    @Override
     public void save( Player player) {
         if( player.getId() == null) {
             insert( player);
@@ -53,6 +55,7 @@ public class PlayerService {
                             player.getFirstname(), player.getLastname(), player.getNickname(), player.getDateOfBirth(), player.getId());
     }
     
+    @Override
     public void remove( Player player) {
         template.update( "DELETE FROM player WHERE player_id = ?", player.getId());
     }

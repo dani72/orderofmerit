@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  * @author dani
  */
 @Service
-public class UserService {
+public class UserService implements CrudService<User> {
 
     @Autowired
     private JdbcTemplate template;
@@ -47,10 +47,12 @@ public class UserService {
         return template.queryForObject( "SELECT * FROM users where user_id = ?", this::createUser, id);
     }
 
+    @Override
     public List<User> findAll() {
         return template.query( "SELECT * FROM users", this::createUser);
     }
     
+    @Override
     public void save( User user) {
         if( user.getId() == null) {
             insert( user);
@@ -70,6 +72,7 @@ public class UserService {
                             user.getUsername(), user.getMail(), user.getRole().name(), user.getId());
     }
     
+    @Override
     public void remove( User user) {
         template.update( "DELETE FROM users WHERE player_id = ?", user.getId());
     }

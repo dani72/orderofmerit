@@ -21,12 +21,12 @@ import com.vaadin.flow.data.binder.Binder;
  */
 public class MeritCRUD extends Crud<Merit> {
     
-    private final MeritDataProvider provider;
+    private final CrudDataProvider<Merit> provider;
     
     public MeritCRUD( MeritService service) {
         super( Merit.class, createMeritEditor());
         
-        this.provider = new MeritDataProvider( service);
+        this.provider = new CrudDataProvider<>( service);
         
         this.setDataProvider( this.provider);
         this.addSaveListener( this::persist);

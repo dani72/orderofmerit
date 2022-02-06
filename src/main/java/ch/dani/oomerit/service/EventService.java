@@ -22,11 +22,12 @@ import org.springframework.stereotype.Service;
  * @author dani
  */
 @Service
-public class EventService {
+public class EventService implements CrudService<Event> {
  
     @Autowired
     private JdbcTemplate template;
     
+    @Override
     public List<Event> findAll() {
         return template.query( "SELECT * FROM event", this::createEvent);
     }
@@ -37,6 +38,7 @@ public class EventService {
         return template.query( "SELECT * FROM event where event.training_date >= ?", this::createEvent, date);
     }
     
+    @Override
     public void save( Event event) {
         if( event.getId() == null) {
             insert( event);
@@ -46,6 +48,7 @@ public class EventService {
         }
     }
     
+    @Override
     public void remove( Event event) {
         template.update( "DELETE FROM event WHERE event_id = ?", event.getId());
     }
