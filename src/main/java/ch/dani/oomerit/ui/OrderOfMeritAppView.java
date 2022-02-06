@@ -10,10 +10,10 @@ import ch.dani.oomerit.service.OrderOfMeritService;
 import ch.dani.oomerit.service.PlayerService;
 import ch.dani.oomerit.service.UserService;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.Route;
@@ -26,20 +26,35 @@ import java.util.function.Supplier;
 @Route( "")
 public class OrderOfMeritAppView extends AppLayout {
 
-    public OrderOfMeritAppView( PlayerService playerService, EventService eventService, MeritService meritService, OrderOfMeritService oomService, UserService userService) {
-        Image img = new Image("https://i.imgur.com/GPpnszs.png", "Vaadin Logo");
-        img.setHeight("44px");
+    public OrderOfMeritAppView( SessionMgr session, PlayerService playerService, EventService eventService, MeritService meritService, OrderOfMeritService oomService, UserService userService) {
+//        Image img = new Image("https://i.imgur.com/GPpnszs.png", "Vaadin Logo");
+//        img.setHeight("44px");
         addToNavbar(new DrawerToggle(), new H3( "Order of Merit TTC Gelterkinden"));
-        
-        var rankingTab = new ViewTab( "Ranking", () -> new RankingView( oomService));
-        var playerTab = new ViewTab( "Players", () -> new PlayerCRUD( playerService));
-        var meritTab = new ViewTab ( "Merits", () -> new MeritCRUD( meritService));
-        var eventTab = new ViewTab( "Events", () -> new EventCRUD( eventService));
-        var addMeritsTab = new ViewTab( "Add Merits", () -> new EnterMeritsView( playerService, eventService, meritService, oomService));
-        var userTab = new ViewTab( "Users", () -> new UserCRUD( userService));
-        
-        var tabs = new Tabs( rankingTab, playerTab, meritTab, eventTab, addMeritsTab, userTab);
 
+        var tabs = new Tabs();
+        var rankingTab = new ViewTab( "Ranking", () -> new RankingView( oomService));
+        
+        tabs.add( rankingTab);
+        
+        if( session.isAdmin()) {
+            var playerTab = new ViewTab( "Players", () -> new PlayerCRUD( playerService));
+            var meritTab = new ViewTab ( "Merits", () -> new MeritCRUD( meritService));
+            var eventTab = new ViewTab( "Events", () -> new EventCRUD( eventService));
+            var userTab = new ViewTab( "Users", () -> new UserCRUD( userService));
+
+            tabs.add( playerTab, meritTab, eventTab, userTab);
+        }
+        
+        if( session.isAdmin() || session.isTrainer()) {
+            var addMeritsTab = new ViewTab( "Add Merits", () -> new EnterMeritsView( playerService, eventService, meritService, oomService));
+    
+            tabs.add( addMeritsTab);
+        }
+        
+        if( !session.isLoggedIn()) {
+            tabs.add( new ActionTab( "Login", () -> UI.getCurrent().navigate( LoginView.class)));
+        }
+        
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         
         tabs.addSelectedChangeListener( this::onTabChanged);
@@ -50,7 +65,14 @@ public class OrderOfMeritAppView extends AppLayout {
     }
 
     private void onTabChanged(Tabs.SelectedChangeEvent event) {
-        this.setContent( ((ViewTab)event.getSelectedTab()).createView());
+        var tab = event.getSelectedTab();
+
+        if( tab instanceof ViewTab vt) {
+            this.setContent( vt.createView());
+        }
+        else if( tab instanceof ActionTab at) {
+            at.execute();
+        }
     }
     
     private class ViewTab extends Tab {
@@ -65,6 +87,21 @@ public class OrderOfMeritAppView extends AppLayout {
         
         public Component createView() {
             return factory.get();
+        }
+    }
+    
+    private class ActionTab extends Tab {
+        
+        private final Runnable action;
+        
+        public ActionTab( String title, Runnable action) {
+            super( title);
+            
+            this.action = action;
+        }
+        
+        public void execute() {
+            this.action.run();
         }
     }
 }

@@ -5,9 +5,12 @@
 package ch.dani.oomerit.service;
 
 import ch.dani.oomerit.domain.User;
+import ch.dani.oomerit.security.PasswordChecker;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import javax.security.auth.login.FailedLoginException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,24 @@ public class UserService {
 
     @Autowired
     private JdbcTemplate template;
+    
+    public User authenticate( String username, String password) throws FailedLoginException {
+        try {
+            User user = template.queryForObject( "SELECT * FROM users where username = ?", this::createUser, username);
+            String pwdhash = template.queryForObject( "SELECT pwdhash FROM users where username = ?", String.class, username);
+
+            if( (user != null) || !StringUtils.isBlank( pwdhash)) {
+                if( PasswordChecker.instance().verifyPassword(password, pwdhash)) {
+                    return user;
+                }
+            }
+        }
+        catch( Exception e) {
+            // Intentionally empty
+        }
+        
+        throw new FailedLoginException( "Could not authenticate user.");
+    }
     
     public User findById(Long id) {
         return template.queryForObject( "SELECT * FROM users where user_id = ?", this::createUser, id);
