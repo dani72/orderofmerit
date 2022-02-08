@@ -36,7 +36,7 @@ public class EventCRUD extends AdminCRUD<Event> {
         this.addDeleteListener( this::remove);
         
         this.getGrid().removeColumnByKey("id");
-        this.getGrid().setColumns( "type", "eventDay");
+        this.getGrid().setColumns( "eventDay", "type");
         Crud.addEditColumn( this.getGrid());
         
         this.addThemeVariants(CrudVariant.NO_BORDER);

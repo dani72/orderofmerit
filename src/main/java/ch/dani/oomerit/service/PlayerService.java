@@ -12,7 +12,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ import org.springframework.stereotype.Service;
  * @author dani
  */
 @Service
-public class PlayerService implements CrudService<Player> {
+public class PlayerService extends AbstractCrudService<Player> {
 
     @Autowired
     private JdbcTemplate template;
@@ -38,17 +37,11 @@ public class PlayerService implements CrudService<Player> {
     
     @Override
     public List<Player> findAll( List<SortField> sortFields) {
-        StringBuilder sql = new StringBuilder( "SELECT * FROM player");
-        
-        if( !sortFields.isEmpty()) {
-            sql.append( " ORDER BY ");
-            sql.append( sortFields.stream().map( sf -> mapFieldName( sf) + " " + sf.direction().name()).collect( Collectors.joining( ",")));
-        }
-        
-        return template.query( sql.toString(), this::createPlayer);
+        return template.query( concatenateSql( "SELECT * FROM player", sortFields), this::createPlayer);
     }
     
-    private String mapFieldName( SortField field) {
+    @Override
+    protected String mapFieldName( SortField field) {
         return switch ( field.fieldname()) {
             case "dateOfBirth" -> "date_of_birth";
             default -> field.fieldname();

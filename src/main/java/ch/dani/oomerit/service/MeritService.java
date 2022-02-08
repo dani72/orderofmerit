@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @author dani
  */
 @Service
-public class MeritService implements CrudService<Merit> {
+public class MeritService extends AbstractCrudService<Merit> {
     
     @Autowired
     private JdbcTemplate template;
@@ -33,7 +33,15 @@ public class MeritService implements CrudService<Merit> {
     
     @Override
     public List<Merit> findAll( List<SortField> sortFields) {
-        return findAll();
+        return template.query( concatenateSql( "SELECT * FROM merit", sortFields), MeritService::createMerit);
+    }
+    
+    @Override
+    protected String mapFieldName( SortField sf) {
+        return switch( sf.fieldname()) {
+            case "name" -> "merit_name";
+            default -> sf.fieldname();
+        };
     }
     
     public Merit findById(Long id) {

@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  * @author dani
  */
 @Service
-public class EventService implements CrudService<Event> {
+public class EventService extends AbstractCrudService<Event> {
  
     @Autowired
     private JdbcTemplate template;
@@ -34,13 +34,22 @@ public class EventService implements CrudService<Event> {
     
     @Override
     public List<Event> findAll( List<SortField> sortFields) {
-        return findAll();
+        return template.query( concatenateSql( "SELECT * FROM event", sortFields), this::createEvent);
     }
 
     public List<Event> findAll( Optional<Boolean> future) {
         Date date = future.map( f -> new Date( f ? System.currentTimeMillis() : 0)).orElse( new Date( 0));
         
         return template.query( "SELECT * FROM event where event.training_date >= ?", this::createEvent, date);
+    }
+    
+    @Override
+    protected String mapFieldName( SortField sf) {
+        return switch( sf.fieldname()) {
+            case "type" -> "eventtype";
+            case "eventDay" -> "eventdate";
+            default -> sf.fieldname();
+        };
     }
     
     @Override
