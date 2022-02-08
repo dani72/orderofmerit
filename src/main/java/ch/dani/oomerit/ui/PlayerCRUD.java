@@ -9,6 +9,7 @@ import ch.dani.oomerit.service.PlayerService;
 import com.vaadin.flow.component.crud.BinderCrudEditor;
 import com.vaadin.flow.component.crud.Crud;
 import com.vaadin.flow.component.crud.CrudEditor;
+import com.vaadin.flow.component.crud.CrudGrid;
 import com.vaadin.flow.component.crud.CrudVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -21,12 +22,12 @@ import com.vaadin.flow.router.Route;
  * @author dani
  */
 @Route( value = "players", layout = OrderOfMeritAppView.class)
-public class PlayerCRUD extends Crud<Player> {
+public class PlayerCRUD extends AdminCRUD<Player> {
     
     private final CrudDataProvider provider;
     
-    public PlayerCRUD( PlayerService service) {
-        super( Player.class, createPlayerEditor());
+    public PlayerCRUD( SessionMgr session, PlayerService service) {
+        super( session, Player.class, new CrudGrid<Player>( Player.class, false), createPlayerEditor());
         
         this.provider = new CrudDataProvider<>( service);
         
@@ -35,6 +36,8 @@ public class PlayerCRUD extends Crud<Player> {
         this.addDeleteListener( this::remove);
         
         this.getGrid().removeColumnByKey("id");
+        this.getGrid().setColumns( "firstname", "nickname", "lastname", "dateOfBirth");
+        Crud.addEditColumn( this.getGrid());
         
         this.addThemeVariants(CrudVariant.NO_BORDER);
         this.setHeightFull();

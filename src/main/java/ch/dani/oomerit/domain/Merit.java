@@ -17,6 +17,7 @@ public class Merit {
     private Long id;
     private String name;
     private Category category;
+    private int points;
 
     public Long getId() {
         return id;
@@ -40,6 +41,14 @@ public class Merit {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+    
+    public int getPoints() {
+        return this.points;
+    }
+    
+    public void setPoints( int points) {
+        this.points = points;
     }
 
     @Override

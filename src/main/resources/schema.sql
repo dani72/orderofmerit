@@ -15,7 +15,8 @@ CREATE TABLE event (
 CREATE TABLE merit (
     merit_id SERIAL PRIMARY KEY,
     merit_name VARCHAR( 128),
-    category VARCHAR( 32)
+    category VARCHAR( 32),
+    points integer
 );
 
 CREATE TABLE merit_received (

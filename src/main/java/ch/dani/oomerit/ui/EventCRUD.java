@@ -10,6 +10,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.crud.BinderCrudEditor;
 import com.vaadin.flow.component.crud.Crud;
 import com.vaadin.flow.component.crud.CrudEditor;
+import com.vaadin.flow.component.crud.CrudGrid;
 import com.vaadin.flow.component.crud.CrudVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -21,12 +22,12 @@ import com.vaadin.flow.router.Route;
  * @author dani
  */
 @Route( value = "events", layout = OrderOfMeritAppView.class)
-public class EventCRUD extends Crud<Event> {
+public class EventCRUD extends AdminCRUD<Event> {
     
     private final CrudDataProvider<Event> provider;
     
-    public EventCRUD( EventService service) {
-        super( Event.class, createEventEditor());
+    public EventCRUD( SessionMgr session, EventService service) {
+        super( session, Event.class, new CrudGrid<Event>( Event.class, false), createEventEditor());
         
         this.provider = new CrudDataProvider<>( service);
         
@@ -35,7 +36,8 @@ public class EventCRUD extends Crud<Event> {
         this.addDeleteListener( this::remove);
         
         this.getGrid().removeColumnByKey("id");
-//        this.getGrid().setColumns( "firstname", "lastname", "nickname", "dateOfBirth");
+        this.getGrid().setColumns( "type", "eventDay");
+        Crud.addEditColumn( this.getGrid());
         
         this.addThemeVariants(CrudVariant.NO_BORDER);
         this.setHeightFull();

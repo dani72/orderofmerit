@@ -51,13 +51,13 @@ public class MeritService implements CrudService<Merit> {
     }
     
     private void insert( Merit merit) {
-        template.update( "INSERT INTO merit (merit_name, category) VALUES (?,?)", 
-                            merit.getName(), merit.getCategory().name());
+        template.update( "INSERT INTO merit (merit_name, category, points) VALUES (?,?,?)", 
+                            merit.getName(), merit.getCategory().name(), merit.getPoints());
     }
     
     private void update( Merit merit) {
-        template.update( "UPDATE MERIT SET merit_name = ? , category = ? WHERE merit_id = ?",
-                            merit.getName(), merit.getCategory().name(), merit.getId());
+        template.update( "UPDATE MERIT SET merit_name = ? , category = ?, points = ? WHERE merit_id = ?",
+                            merit.getName(), merit.getCategory().name(), merit.getPoints(), merit.getId());
     }
     
     public static Merit createMerit( ResultSet rs, int rowNum) throws SQLException {
@@ -66,7 +66,7 @@ public class MeritService implements CrudService<Merit> {
         merit.setId( rs.getLong( "merit_id"));
         merit.setName( rs.getString( "merit_name"));
         merit.setCategory( Merit.Category.valueOf( rs.getString( "category")));
-        
+        merit.setPoints( rs.getInt( "points"));
         return merit;
     }
 }

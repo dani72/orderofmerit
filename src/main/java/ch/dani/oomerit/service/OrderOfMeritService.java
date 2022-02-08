@@ -28,10 +28,12 @@ import org.springframework.stereotype.Service;
 public class OrderOfMeritService {
 
         private static final String sql = """
-select p.*, CASE WHEN mr.total_merits IS NULL THEN 0 ELSE mr.total_merits END
-from player p left join (select player_id as pid, count(*) as total_merits from merit_received group by player_id) mr ON p.player_id = mr.pid 
-order by total_merits DESC;                  
-                  """;
+select p.*, CASE WHEN total_points IS NULL THEN 0 ELSE total_points END from 
+player p left join
+(select mir.player_id, sum(m.points) total_points from merit_received mir join merit m on m.merit_id = mir.merit_id group by mir.player_id) m
+on p.player_id = m.player_id
+order by total_points desc
+""";
 
     @Autowired
     private JdbcTemplate template;
@@ -64,7 +66,7 @@ order by total_merits DESC;
         var entry = new OrderEntry();
         
         entry.setPlayer( createPlayer( rs));
-        entry.setNofMerits( rs.getInt( "total_merits"));
+        entry.setTotalPoints( rs.getInt( "total_points"));
         
         return entry;
     }

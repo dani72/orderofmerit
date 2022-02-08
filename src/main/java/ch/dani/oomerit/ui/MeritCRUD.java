@@ -10,10 +10,14 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.crud.BinderCrudEditor;
 import com.vaadin.flow.component.crud.Crud;
 import com.vaadin.flow.component.crud.CrudEditor;
+import com.vaadin.flow.component.crud.CrudGrid;
 import com.vaadin.flow.component.crud.CrudVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Route;
 
 /**
@@ -21,13 +25,15 @@ import com.vaadin.flow.router.Route;
  * @author dani
  */
 @Route( value = "merits", layout = OrderOfMeritAppView.class)
-public class MeritCRUD extends Crud<Merit> {
+public class MeritCRUD extends AdminCRUD<Merit> {
     
+    private final SessionMgr session;
     private final CrudDataProvider<Merit> provider;
     
-    public MeritCRUD( MeritService service) {
-        super( Merit.class, createMeritEditor());
+    public MeritCRUD( SessionMgr session, MeritService service) {
+        super( session, Merit.class, new CrudGrid<Merit>( Merit.class, false), createMeritEditor());
         
+        this.session = session;
         this.provider = new CrudDataProvider<>( service);
         
         this.setDataProvider( this.provider);
@@ -35,7 +41,11 @@ public class MeritCRUD extends Crud<Merit> {
         this.addDeleteListener( this::remove);
         
         this.getGrid().removeColumnByKey("id");
-//        this.getGrid().setColumns( "firstname", "lastname", "nickname", "dateOfBirth");
+        this.getGrid().setColumns( "name", "category", "points");
+        this.getGrid().getColumnByKey( "name").setWidth( "50%");
+        this.getGrid().getColumnByKey( "category").setWidth( "20%");
+        this.getGrid().getColumnByKey( "points").setTextAlign(ColumnTextAlign.END).setWidth( "20%");
+        Crud.addEditColumn( this.getGrid());
         
         this.addThemeVariants(CrudVariant.NO_BORDER);
         this.setHeightFull();
@@ -52,7 +62,8 @@ public class MeritCRUD extends Crud<Merit> {
     private static CrudEditor<Merit> createMeritEditor() {
         var name = new TextField("Name");
         var category = new ComboBox<Merit.Category>( "Category");
-        var form = new FormLayout( name, category);
+        var points = new IntegerField( "Points");
+        var form = new FormLayout( name, category, points);
 
         category.setItems( Merit.Category.values());
         
@@ -60,7 +71,15 @@ public class MeritCRUD extends Crud<Merit> {
         
         binder.bind( name, Merit::getName, Merit::setName);
         binder.bind( category, Merit::getCategory, Merit::setCategory);
+        binder.bind( points, Merit::getPoints, Merit::setPoints);
 
         return new BinderCrudEditor<>(binder, form);
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        if( !session.isAdmin()) {
+            event.rerouteTo( RankingView.class);
+        }
     }
 }

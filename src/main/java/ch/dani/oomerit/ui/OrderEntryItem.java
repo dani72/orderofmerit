@@ -21,6 +21,6 @@ public class OrderEntryItem extends LitTemplate {
         this.getElement().setProperty( "nickname", entry.getPlayer().getNickname());
         this.getElement().setProperty( "firstname", entry.getPlayer().getFirstname());
         this.getElement().setProperty( "lastname", entry.getPlayer().getLastname());
-        this.getElement().setProperty( "points", Integer.toString( entry.getNofMerits()));
+        this.getElement().setProperty( "points", Integer.toString( entry.getTotalPoints()));
     }
 }

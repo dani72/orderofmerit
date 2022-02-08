@@ -11,7 +11,7 @@ package ch.dani.oomerit.domain;
 public class OrderEntry {
     
     private Player player;
-    private int nofMerits;
+    private int totalPoints;
 
     public Player getPlayer() {
         return player;
@@ -21,11 +21,11 @@ public class OrderEntry {
         this.player = player;
     }
 
-    public int getNofMerits() {
-        return nofMerits;
+    public int getTotalPoints() {
+        return totalPoints;
     }
 
-    public void setNofMerits(int nofMerits) {
-        this.nofMerits = nofMerits;
+    public void setTotalPoints(int points) {
+        this.totalPoints = points;
     }
 }

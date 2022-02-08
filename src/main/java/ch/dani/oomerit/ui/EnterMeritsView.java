@@ -21,6 +21,8 @@ import com.vaadin.flow.component.listbox.MultiSelectListBox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import java.util.Collections;
 
@@ -29,15 +31,17 @@ import java.util.Collections;
  * @author dani
  */
 @Route( value = "addmerits", layout = OrderOfMeritAppView.class)
-public class EnterMeritsView extends VerticalLayout {
+public class EnterMeritsView extends VerticalLayout implements BeforeEnterObserver {
     
+    private final SessionMgr session;
     private final OrderOfMeritService oomService;
     private final ComboBox<Player> players;
     private final ComboBox<Event> events;
     private final MultiSelectListBox<Merit> merits;
     private final Button saveButton;
     
-    public EnterMeritsView( PlayerService playerService, EventService eventService, MeritService meritService, OrderOfMeritService oomService) {
+    public EnterMeritsView( SessionMgr session, PlayerService playerService, EventService eventService, MeritService meritService, OrderOfMeritService oomService) {
+        this.session = session;
         this.oomService = oomService;
         
         this.setWidthFull();
@@ -127,6 +131,13 @@ public class EnterMeritsView extends VerticalLayout {
             oomService.updateMeritsReceived( mr);
 
             new Notification( "Merits created.", 2000).open();
+        }
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        if( !session.isAdmin() && !session.isTrainer()) {
+            event.rerouteTo( RankingView.class);
         }
     }
 }
