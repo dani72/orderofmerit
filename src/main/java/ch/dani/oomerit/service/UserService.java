@@ -53,6 +53,11 @@ public class UserService implements CrudService<User> {
     }
     
     @Override
+    public List<User> findAll( List<SortField> sortFields) {
+        return findAll();
+    }
+    
+    @Override
     public void save( User user) {
         if( user.getId() == null) {
             insert( user);

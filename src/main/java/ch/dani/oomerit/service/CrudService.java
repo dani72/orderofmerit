@@ -19,6 +19,13 @@ public interface CrudService<T> {
     List<T> findAll();
     
     /**
+     * Returns all entities sorted by the sortFields
+     * @param sortFields list of fields defining the sort order
+     * @return list of entities sorted according to specification
+     */
+    List<T> findAll( List<SortField> sortFields);
+    
+    /**
      * Inserts or updates the entity
      * @param entity to save
      */

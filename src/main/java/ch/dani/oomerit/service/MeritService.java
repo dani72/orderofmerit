@@ -31,6 +31,11 @@ public class MeritService implements CrudService<Merit> {
         return template.query( "SELECT * FROM merit", MeritService::createMerit);
     }
     
+    @Override
+    public List<Merit> findAll( List<SortField> sortFields) {
+        return findAll();
+    }
+    
     public Merit findById(Long id) {
         return template.queryForObject( "SELECT * FROM merit where merit_id = ?", MeritService::createMerit, id);
     }

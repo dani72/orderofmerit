@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,25 @@ public class PlayerService implements CrudService<Player> {
     @Override
     public List<Player> findAll() {
         return template.query( "SELECT * FROM player", this::createPlayer);
+    }
+    
+    @Override
+    public List<Player> findAll( List<SortField> sortFields) {
+        StringBuilder sql = new StringBuilder( "SELECT * FROM player");
+        
+        if( !sortFields.isEmpty()) {
+            sql.append( " ORDER BY ");
+            sql.append( sortFields.stream().map( sf -> mapFieldName( sf) + " " + sf.direction().name()).collect( Collectors.joining( ",")));
+        }
+        
+        return template.query( sql.toString(), this::createPlayer);
+    }
+    
+    private String mapFieldName( SortField field) {
+        return switch ( field.fieldname()) {
+            case "dateOfBirth" -> "date_of_birth";
+            default -> field.fieldname();
+        };
     }
     
     @Override

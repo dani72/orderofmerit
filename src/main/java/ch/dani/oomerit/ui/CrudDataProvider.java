@@ -5,9 +5,14 @@
 package ch.dani.oomerit.ui;
 
 import ch.dani.oomerit.service.CrudService;
+import ch.dani.oomerit.service.SortField;
 import com.vaadin.flow.component.crud.CrudFilter;
 import com.vaadin.flow.data.provider.AbstractBackEndDataProvider;
 import com.vaadin.flow.data.provider.Query;
+import com.vaadin.flow.data.provider.QuerySortOrder;
+import com.vaadin.flow.data.provider.SortDirection;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -27,7 +32,15 @@ public class CrudDataProvider<T> extends AbstractBackEndDataProvider<T, CrudFilt
         int offset = query.getOffset();
         int limit = query.getLimit();
 
-        return service.findAll().stream().skip(offset).limit(limit);
+        return service.findAll( mapSortOrder( query.getSortOrders())).stream().skip(offset).limit(limit);
+    }
+    
+    private List<SortField> mapSortOrder( List<QuerySortOrder> sortOrders) {
+        return sortOrders.stream().map( this::createSortField).collect( Collectors.toList());
+    }
+    
+    private SortField createSortField( QuerySortOrder sortOrder) {
+        return new SortField( sortOrder.getDirection() == SortDirection.ASCENDING ? SortField.Direction.ASC : SortField.Direction.DESC, sortOrder.getSorted());
     }
 
     @Override

@@ -32,6 +32,11 @@ public class EventService implements CrudService<Event> {
         return template.query( "SELECT * FROM event", this::createEvent);
     }
     
+    @Override
+    public List<Event> findAll( List<SortField> sortFields) {
+        return findAll();
+    }
+
     public List<Event> findAll( Optional<Boolean> future) {
         Date date = future.map( f -> new Date( f ? System.currentTimeMillis() : 0)).orElse( new Date( 0));
         
