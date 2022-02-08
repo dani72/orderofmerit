@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  * @author dani
  */
 @Service
-public class UserService implements CrudService<User> {
+public class UserService extends AbstractCrudService<User> {
 
     @Autowired
     private JdbcTemplate template;
@@ -54,7 +54,15 @@ public class UserService implements CrudService<User> {
     
     @Override
     public List<User> findAll( List<SortField> sortFields) {
-        return findAll();
+        return template.query( concatenateSql( "SELECT * FROM users", sortFields), this::createUser);
+    }
+    
+    @Override
+    protected String mapFieldName( SortField field) {
+        return switch ( field.fieldname()) {
+            case "role" -> "rolename";
+            default -> field.fieldname();
+        };
     }
     
     @Override
