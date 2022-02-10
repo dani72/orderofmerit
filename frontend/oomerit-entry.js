@@ -37,7 +37,7 @@ export class OrderOfMeritEntry extends LitElement {
             border-radius: 50%;
             overflow: hidden;
             background-position: center;
-            background-size: 100%;
+            background-size: 70%;
             background-repeat: no-repeat;
             margin: 10px;
         }
@@ -57,7 +57,7 @@ export class OrderOfMeritEntry extends LitElement {
     render() {
         return html`
             <div class="wrapper">
-                <div class="avatar" style="background-image: url(https://www.tt-shop.de/media/catalog/product/cache/1/small_image/200x200/9df78eab33525d08d6e5fb8d27136e95/p/r/profi_tischtennisschla_ger_allround.png);"></div>
+                <div class="avatar" style="background-image: url( /images/order.png);"></div>
                 <div class="container">
                     <h3>${this.nickname}</h3>
                     <span>${this.firstname} ${this.lastname}</span>
