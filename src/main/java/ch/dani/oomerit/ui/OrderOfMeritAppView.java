@@ -23,7 +23,7 @@ import com.vaadin.flow.server.PWA;
  * @author dani
  */
 @PWA(name = "Order of Merit", shortName = "OrderOfMerit")
-@Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no")
+@Viewport( "width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no")
 @PageTitle( "Order of Merit TTC Gelterkinden")
 @Route( "")
 public class OrderOfMeritAppView extends AppLayout implements AppShellConfigurator, RouterLayout {
