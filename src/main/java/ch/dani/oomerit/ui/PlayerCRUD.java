@@ -16,6 +16,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
+import java.util.Locale;
 
 /**
  *
@@ -56,6 +57,9 @@ public class PlayerCRUD extends AdminCRUD<Player> {
         TextField lastName = new TextField("Lastname");
         TextField nickName = new TextField("Nickname");
         DatePicker dateOfBirth = new DatePicker( "Date of Birth");
+        
+        dateOfBirth.setLocale( new Locale( "ch_de"));
+        
         FormLayout form = new FormLayout(firstName, lastName, nickName, dateOfBirth);
 
         Binder<Player> binder = new Binder( Player.class);

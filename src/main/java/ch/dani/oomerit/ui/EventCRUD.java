@@ -16,6 +16,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
+import java.util.Locale;
 
 /**
  *
@@ -56,6 +57,7 @@ public class EventCRUD extends AdminCRUD<Event> {
         var type = new ComboBox<Event.Type>( "Type", Event.Type.values());
         var form = new FormLayout( date, type);
 
+        date.setLocale( new Locale( "ch_de"));
         type.setItems( Event.Type.values());
         
         var binder = new Binder<Event>( Event.class);

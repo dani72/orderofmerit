@@ -86,6 +86,10 @@ public class PlayerService extends AbstractCrudService<Player> {
     }
     
     private LocalDate toLocalDate( Date date) {
+        if( date == null) {
+            return null;
+        }
+        
         var instant = Instant.ofEpochMilli( date.getTime()); 
         
         return LocalDate.ofInstant( instant, ZoneId.systemDefault());

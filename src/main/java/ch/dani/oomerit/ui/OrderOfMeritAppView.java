@@ -9,6 +9,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
@@ -29,7 +30,11 @@ import com.vaadin.flow.server.PWA;
 public class OrderOfMeritAppView extends AppLayout implements AppShellConfigurator, RouterLayout {
 
     public OrderOfMeritAppView( SessionMgr session, OrderOfMeritService oomService) {
-        addToNavbar(new DrawerToggle(), new H3( "Order of Merit TTC Gelterkinden"));
+        Image logo = new Image( "/images/ttracket.png", "Logo");
+        
+        logo.setHeight( "30px");
+        
+        addToNavbar(new DrawerToggle(), logo, new H3( "Order of Merit TTCG"));
 
         var tabs = new Tabs();
         var rankingTab = new ActionTab( "Ranking", () -> UI.getCurrent().navigate( RankingView.class));
